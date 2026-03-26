@@ -7,7 +7,6 @@ import cors from "cors";
 dotenv.config();
 
 const app: Express = express();
-const port = process.env.PORT || 3001;
 
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
 const prisma = new PrismaClient({ adapter });
@@ -40,6 +39,12 @@ app.get("/challenges/:title", async (req: Request<{ title: string }>, res: Respo
   }
 });
 
-app.listen(port, () => {
-  console.log(`[server]: Server is running at http://localhost:${port}`);
-});
+// Local development
+if (process.env.NODE_ENV !== "production") {
+  const port = process.env.PORT || 3001;
+  app.listen(port, () => {
+    console.log(`[server]: Server is running at http://localhost:${port}`);
+  });
+}
+
+export default app;
