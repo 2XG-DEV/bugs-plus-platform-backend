@@ -1,0 +1,38 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Example {
+  id            String     @id @default(cuid())
+  xValue        Int
+  yValue        Int
+  expectedValue Int
+  Challenge     Challenge? @relation(fields: [challengeId], references: [id])
+  challengeId   String?
+}
+
+model TestCase {
+  id            String     @id @default(cuid())
+  xValue        Int
+  yValue        Int
+  expectedValue Int
+  Challenge     Challenge? @relation(fields: [challengeId], references: [id])
+  challengeId   String?
+}
+
+model Challenge {
+  id          String     @id @default(cuid())
+  title       String     @unique
+  description String
+  content     String
+  examples    Example[]
+  testCases   TestCase[]
+}
